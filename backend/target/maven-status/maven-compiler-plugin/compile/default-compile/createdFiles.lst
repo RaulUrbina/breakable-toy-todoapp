@@ -1,8 +1,0 @@
-com/springboot/todoapp_backend/TodoappBackendApplication.class
-com/springboot/todoapp_backend/dtos/ToDoUpdateDTO.class
-com/springboot/todoapp_backend/model/ToDo.class
-com/springboot/todoapp_backend/service/ToDoService.class
-com/springboot/todoapp_backend/dtos/ToDoDTO.class
-com/springboot/todoapp_backend/model/ToDo$Priority.class
-com/springboot/todoapp_backend/TodoappBackendApplication$HelloController.class
-com/springboot/todoapp_backend/controller/ToDoController.class

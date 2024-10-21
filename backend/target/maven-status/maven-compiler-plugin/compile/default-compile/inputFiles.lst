@@ -1,6 +1,0 @@
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/TodoappBackendApplication.java
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/controller/ToDoController.java
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/dtos/ToDoDTO.java
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/dtos/ToDoUpdateDTO.java
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/model/ToDo.java
-/Users/raul.reyes/Documents/GitHub/breakable-toy-todoapp/backend/src/main/java/com/springboot/todoapp_backend/service/ToDoService.java
