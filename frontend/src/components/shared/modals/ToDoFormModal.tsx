@@ -45,7 +45,7 @@ const FormSchema = z.object({
     .optional()
     .refine(
       (date) => {
-        if (!date) return true;
+        if (!date || date == undefined) return true;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         return date >= today;
@@ -185,6 +185,18 @@ const ToDoFormModal = ({
             />
           </PopoverContent>
         </Popover>
+        {date && isEdit && (
+          <Button
+            onClick={() => {
+              setDate(undefined);
+              form.setValue("dueDate", undefined);
+            }}
+            variant="outline"
+            className="mt-2"
+          >
+            Clear Date
+          </Button>
+        )}
         {form.formState.errors.dueDate && (
           <p className="text-red-500">
             {form.formState.errors.dueDate.message}
