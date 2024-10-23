@@ -118,7 +118,7 @@ public class ToDoService {
     public Optional<ToDo> updateItem(String id, UpdateToDoDTO request) {
         Optional<ToDo> existingItem = getItem(id);
 
-        if (request.getText() == null && request.getPriority() == null && (request.getDueDate() == null || request.getDueDate().isEmpty())) {
+        if (request.getText() == null && request.getPriority() == null) {
             throw new IllegalArgumentException("No valid fields provided for update");
         }
 
@@ -130,12 +130,13 @@ public class ToDoService {
             if (Objects.nonNull(request.getPriority())) {
                 todo.setPriority(request.getPriority());
             }
-            if (request.getDueDate() != null && !request.getDueDate().isEmpty()) {
+            if (request.getDueDate() == null || request.getDueDate().isEmpty()) {
+                todo.setDueDate(null);
+            } else {
                 LocalDate newDueDate = LocalDate.parse(request.getDueDate());
                 if (newDueDate.isBefore(LocalDate.now())) {
                     throw new IllegalArgumentException("The due date must be today or a future date.");
-                }
-                else {
+                } else {
                     todo.setDueDate(newDueDate);
                 }
             }
