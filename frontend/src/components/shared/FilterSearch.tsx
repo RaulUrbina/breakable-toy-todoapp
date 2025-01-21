@@ -60,7 +60,7 @@ const FilterSearch = () => {
   return (
     <div className="grid grid-cols-4 grid-rows-2 gap-4 p-4 rounded-lg border">
       {/* Filter By Name */}
-      <div className="col-span-4 rounded-lg flex items-center space-x-4">
+      <div role="search" className="col-span-4 rounded-lg flex items-center space-x-4">
         <Label className="w-[85px]">Name</Label>
         <Input
           className="w-full"
