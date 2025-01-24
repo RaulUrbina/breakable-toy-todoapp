@@ -84,6 +84,23 @@ const ToDoTable = () => {
   if (!todos || todos.length === 0) {
     return <EmptyTable />;
   }
+
+  const getRowBackgroundColor = (dueDate: string | undefined) => {
+    if (!dueDate) return "";
+
+    const today = new Date();
+    const due = new Date(dueDate);
+    const timeDiff = due.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    if (daysDiff <= 7) {
+      return "bg-[#FF8080]";
+    } else if (daysDiff <= 14) {
+      return "bg-[#F6FDC3]";
+    } else {
+      return "bg-[#CDFAD5]";
+    }
+  };
   return (
     <>
       <Table className="w-full border rounded-lg">
@@ -109,7 +126,12 @@ const ToDoTable = () => {
         </TableHeader>
         <TableBody>
           {todos.map((todo) => (
-            <TableRow key={todo.id}>
+            <TableRow
+              key={todo.id}
+              className={`${getRowBackgroundColor(todo.dueDate)} ${
+                todo.done ? "line-through text-gray-500" : ""
+              }`}
+            >
               <TableCell>
                 <Checkbox
                   checked={todo.done}
@@ -118,11 +140,24 @@ const ToDoTable = () => {
                   }
                 />
               </TableCell>
-              <TableCell className="font-medium">{todo.text}</TableCell>
-              <TableCell className="align-middle">
-                {RenderPriorityIcon(todo.priority)}
+              <TableCell
+                className={`font-medium ${
+                  todo.done ? "line-through text-gray-500" : ""
+                }`}
+              >
+                {todo.text}
               </TableCell>
-              <TableCell>{todo.dueDate}</TableCell>
+              <TableCell className="align-middle">
+                <div className="flex flex-row gap-x-2">
+                  {RenderPriorityIcon(todo.priority)}
+                  {todo.priority}
+                </div>
+              </TableCell>
+              <TableCell
+                className={`${todo.done ? "line-through text-gray-500" : ""}`}
+              >
+                {todo.dueDate ? todo.dueDate : "-"}
+              </TableCell>
               <TableCell>
                 <Button onClick={() => editToDo(todo)}>
                   <FaEdit />
