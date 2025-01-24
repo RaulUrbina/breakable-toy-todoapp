@@ -2,6 +2,7 @@ package com.springboot.todoapp_backend.controller;
 
 import com.springboot.todoapp_backend.Utilities.ApiResponse;
 import com.springboot.todoapp_backend.dtos.NewToDoDTO;
+import com.springboot.todoapp_backend.dtos.UpdateToDoDTO;
 import com.springboot.todoapp_backend.model.ToDo;
 import com.springboot.todoapp_backend.service.ToDoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,4 +90,89 @@ public class ToDoControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Item not found", Objects.requireNonNull(response.getBody()).getMessage());
     }
+
+    @Test
+    void testUpdateItem_Success() {
+        UpdateToDoDTO updateToDo = new UpdateToDoDTO("Updated Task", ToDo.Priority.MEDIUM, "");
+        ToDo mockToDo = new ToDo();
+        mockToDo.setText("Updated Task");
+
+        when(toDoService.updateItem(eq("1"), any(UpdateToDoDTO.class))).thenReturn(Optional.of(mockToDo));
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.updateItem("1", updateToDo);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Updated Task", Objects.requireNonNull(response.getBody()).getData().getText());
+    }
+
+    @Test
+    void testUpdateItem_NotFound() {
+        UpdateToDoDTO updateToDo = new UpdateToDoDTO("Updated Task", ToDo.Priority.MEDIUM, "");
+
+        when(toDoService.updateItem(eq("1"), any(UpdateToDoDTO.class))).thenReturn(Optional.empty());
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.updateItem("1", updateToDo);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Item not found", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+    @Test
+    void testMarkAsDone_AlreadyDone() {
+        ToDo mockToDo = new ToDo();
+        mockToDo.setText("Test Task");
+        mockToDo.setDone(true);
+
+        when(toDoService.getItem("1")).thenReturn(Optional.of(mockToDo));
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.markAsDone("1");
+
+        assertEquals(HttpStatus.NOT_MODIFIED, response.getStatusCode());
+        assertEquals("The item is already marked as done.", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+    @Test
+    void testMarkAsDone_NotFound() {
+        when(toDoService.getItem("1")).thenReturn(Optional.empty());
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.markAsDone("1");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Item not found", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+    @Test
+    void testMarkAsUndone_AlreadyUndone() {
+        ToDo mockToDo = new ToDo();
+        mockToDo.setText("Test Task");
+        mockToDo.setDone(false);
+
+        when(toDoService.getItem("1")).thenReturn(Optional.of(mockToDo));
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.markAsUndone("1");
+
+        assertEquals(HttpStatus.NOT_MODIFIED, response.getStatusCode());
+        assertEquals("The item is already marked as undone.", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+    @Test
+    void testMarkAsUndone_NotFound() {
+        when(toDoService.getItem("1")).thenReturn(Optional.empty());
+
+        ResponseEntity<ApiResponse<ToDo>> response = toDoController.markAsUndone("1");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Item not found", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+
+    @Test
+    void testGetFilteredList_InvalidSortBy() {
+        ResponseEntity<ApiResponse<List<ToDo>>> response = toDoController.getFilteredList(null, null, null, 0, "invalid", null);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid value for 'sortBy'. Accepted values are 'priority' or 'dueDate'", Objects.requireNonNull(response.getBody()).getMessage());
+    }
+
+
 }
